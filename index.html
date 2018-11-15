@@ -1,0 +1,68 @@
+<!--
+                                                          :::      ::::::::
+     index.html                                         :+:      :+:    :+:
+                                                      +:+ +:+         +:+
+     By: hp-user <hp-user@student.42.fr>            +#+  +:+       +#+
+                                                  +#+#+#+#+#+   +#+
+     Created: 2018/11/13 07:31:17 by hp-user           #+#    #+#
+     Updated: 2018/11/15 11:19:44 by hp-user          ###   ########.fr
+-->
+
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Tchat NodeJs</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="socket.io/socket.io.js"></script>
+		<style>
+			body {
+				margin-top : 40px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="well">
+						<h3>Online users</h3>
+						<ul class="list-group" id="users"></ul>
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="Tchat" id = "tchat"></div>
+					<form id  = "messageForm">
+						<div class="form-group">
+							<label>Enter Message</label>
+							<textarea class = "form-control" id = "message"></textarea>
+							<br/>
+							<input type="submit" class="btn btn-primary" value = "Send Message"/>
+						</div>
+					<form>
+				</div>
+			</div>
+		</div>
+			<script>
+				$(function() {
+					let socket = io.connect();
+					var $messageForm = $('#messageForm');
+					var $message = $('#message');
+					var $tchat = $('#tchat');
+
+					$messageForm.submit((e) => {
+						e.preventDefault();
+						console.log("Submitted !");
+						socket.emit('send message', $message.val());
+						$message.val('');
+					});
+					socket.on('new message', (data) => {
+						console.log("front : %s", data.msg);
+						$tchat.append('<div class="well">'+ data.msg +'</div>');
+					});
+				});
+			</script>
+	</body>
+</html>

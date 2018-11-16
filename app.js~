@@ -50,7 +50,7 @@ io.sockets.on('connection', (socket) => {
 		console.log("DISCONNECT | sockets Total : %d", connections.length);
 	});
 	socket.on('send message', (data) => {
-		io.sockets.emit('new message', {msg: data});
+		socket.emit('new message', {msg: data});
 		console.log("data = %s", data);
 	});
 });
